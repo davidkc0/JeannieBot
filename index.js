@@ -24,12 +24,19 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong token')
 })
 
-app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === token) {
-    res.send(req.query['hub.challenge']);
-  } else {
-    res.send('Error, wrong validation token');
+// respond to post calls from facebook
+app.post('/webhook/', function (req, res) {
+  var messaging_events = req.body.entry[0].messaging;
+  for (i = 0; i < messaging_events.length; i++) {
+    var event = req.body.entry[0].messaging[i];
+    var sender = event.sender.id;
+    if (event.message && event.message.text) {
+      var incomingText = event.message.text;
+      console.log('You sent the message', incomingText);
+      sendTextMessage(sender, "Text received, echo: "+ incomingText.substring(0, 200));
+    }
   }
+  res.sendStatus(200);
 });
 
 // Spin up the server
