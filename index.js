@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
       }, function(error, response, body) {
         try {
           var condition = body.query.results.channel.item.condition;
-          sendTextMessage(sender, "Today is " + condition.temp + " and " + condition.text + " in " + location);
+          sendTextMessage(sender, "The current weather in " + location + "is" condition.temp + " degrees and " + condition.text ".");
         } catch(err) {
           console.error('error caught', err);
           sendTextMessage(sender, "There was an error.");
